@@ -1,20 +1,21 @@
 <?php 
-// NEED INSTALL PHPMailer
-$url = 'https://csonelove.ru/';
+// NEED PHPMailer 
+require_once 'cfg.php';
 
-$lasttime = time() - 86400*3; // 3 days
-
+$lasttime = time() - 86400/3; // 3days
+var_dump($lasttime);
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// в amx_admins_servers + поле lasttime, тип int(11), NULL - Да
-$get = $pdo->query("SELECT * FROM amx_admins_servers admsrv JOIN amx_amxadmins amxadm WHERE admsrv.lasttime <= '".$lasttime."'");
+$get = $pdo->query("SELECT * FROM amx_admins_servers admsrv JOIN amx_amxadmins amxadm WHERE amxadm.expired <= '".$lasttime."'");
 $row = $get->fetch(PDO::FETCH_ASSOC);
+//echo '<pre>';
+//print_r($row);
 
 if ( $row['email'] != NULL ) {
-	require 'inc/email/src/Exception.php';
-	require 'inc/email/src/PHPMailer.php';
-	require 'inc/email/src/SMTP.php';
+	require 'email/src/Exception.php';
+	require 'email/src/PHPMailer.php';
+	require 'email/src/SMTP.php';
 
 	$mail = new PHPMailer(true);                              // Passing `true` enables exceptions
 	try {
@@ -24,7 +25,7 @@ if ( $row['email'] != NULL ) {
 	    $mail->isSMTP();                                      // Настройте почтовую программу на использование SMTP
 	    $mail->Host = 'smtp.gmail.com;smtp.gmail.com';  // Укажите основной и резервный SMTP-серверы
 	    $mail->SMTPAuth = true;                               // Включить аутентификацию SMTP
-	    $mail->Username = 'alabamaster1@gmail.com';                 // SMTP username
+	    $mail->Username = '';                 // SMTP username
 	    $mail->Password = '';                           // SMTP password
 	    $mail->SMTPSecure = 'ssl';                            // Включить шифрование TLS, `ssl` также разрешен
 	    $mail->Port = 465;                                    // TCP-порт для подключения
@@ -45,7 +46,7 @@ if ( $row['email'] != NULL ) {
             Ваш никнейм: ".$row['nickname']."</div>
         ";
 	    
-	    // if html not supported
+	    // если html не выводится
 	    $mail->AltBody = "
 			Ваши привилегии истекают через 3 дня! | 
 			Ссылка на покупку привилегий: ".$url."
