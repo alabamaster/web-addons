@@ -1,5 +1,5 @@
 <?php 
-// need PHPMailer
+// need PHPMailer!!!
 require_once 'cfg.php';
 
 $lasttime = time() - 86400/3; // 3days
@@ -35,19 +35,25 @@ if ( $get != NULL ) {
 
 		    //Content
 		    $mail->isHTML(true);                                  // Set email format to HTML
-		    $mail->Subject = 'CS Shop - Привилегии подходят к концу!'; // тема сообщения
+		    $mail->Subject = 'CS Shop - Срок привилегий подходит к концу!'; // тема сообщения
 		    
+		    if ( $row['username'] == NULL ) {
+				$name = 'Ваш никнейм: <b>' . $row['nickname'] . '</b>';
+			} else {
+				$name = 'Ваш SteamID: <b>' . $row['username'] . '</b>';
+			}
+
 		    // отпавка html письма
 		    $mail->Body    = "<div style='background-color:#ffb4b4;padding:10px;border-radius:10px;font-size: 14px;'>
-	            Ваши привилегии подходят к концу!<br>
-	            Продлить можно <b><a href='".$url."'' target='_blank'>тут</a></b><br>
-	            Ваш никнейм: ".$row['nickname']."</div>
+	            Срок ваших привилегий подходит к концу!<br>
+	            Ссылка на продление <a href='".$url."'' target='_blank'>клик</a><br>
+	            ".$name."</div>
 	        ";
 		    
 		    // если html не выводится
 		    $mail->AltBody = "
-				Ваши привилегии подходят к концу! | 
-				Продлить можно тут ".$url."
+				Срок ваших привилегий подходит к концу! | 
+				Ссылка на продление ".$url." | ".$name."
 			";
 
 		    $mail->send();
@@ -57,3 +63,5 @@ if ( $get != NULL ) {
 		}
 	}
 }
+
+?>
