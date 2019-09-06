@@ -1,5 +1,6 @@
 <?php 
-require_once 'cfg.php';
+// use http://phpfaq.ru/pdo/pdo_wrapper
+//require 'config.php';
 
 $lasttime = time() - 86400*3; // 3days
 $lasttime2 = time() + 86400*3; // 3days
@@ -14,10 +15,12 @@ require 'email/src/SMTP.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$get = qry("SELECT id, admin_id, created, expired, email, steamid, nickname, flags, tarif_id, server_id FROM amx_amxadmins, amx_admins_servers WHERE expired >= ? AND admin_id = id AND email != 'NULL' AND expired <= ?", array($lasttime, $lasttime2));
+$sql = DB::run("SELECT * FROM `amx_amxadmins` `t1` JOIN `amx_admins_servers` `t2` WHERE `t1`.`expired` >= ? AND `t2`.`admin_id` = `t1`.`id` AND `t2`.`email` != 'NULL' AND `t1`.`expired` <= ?", [ $lasttime, $lasttime2 ])->fetchAll();
 
-if ( $get ) {
-	while ( $row = $get->fetch(PDO::FETCH_ASSOC) ) {
+if ( !empty($sql) ) 
+{
+	foreach( $sql as $row ) 
+	{
 		$mail = new PHPMailer(true);								// Passing `true` enables exceptions
 		try {
 			//Server settings
