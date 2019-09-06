@@ -1,1 +1,32 @@
-asd
+.mess {
+	padding: 7px 18px 9px;
+	margin: 15px 20px;
+	border: 1px solid transparent;
+	border-radius: 2px;
+	min-height: 40px;
+	line-height: 38px;
+	font-size: 15px;
+	padding-left: 60px;
+	color: #505050;
+}
+.error {
+	border-color: #f2ab99;
+	background-color: #ffefe9;
+	background-image: url(msg_error.png);
+	background-repeat: no-repeat;
+	background-position: 12px 12px;
+}
+.ok {
+	border-color: #00b92c;
+	background-color: #eaffe9;
+	background-image: url(msg_ok.png);
+	background-repeat: no-repeat;
+	background-position: 12px 12px;
+}
+.warn {
+	border-color: #ea9100;
+	background-color: #fff9e9;
+	background-image: url(msg_warning.png);
+	background-repeat: no-repeat;
+	background-position: 12px 9px;
+}
